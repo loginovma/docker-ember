@@ -1,26 +1,14 @@
----
+sudo: required
 language: node_js
-node_js:
-  - "6"
-
-sudo: false
-dist: trusty
+services:
+  - docker
 
 addons:
   chrome: stable
 
-cache:
-  directories:
-    - $HOME/.npm
-
-env:
-  global:
-    # See https://git.io/vdao3 for details.
-    - JOBS=1
-
 before_install:
+  - docker build -t docker-ember -f Dockerfile.dev .
   - npm config set spin false
 
 script:
-  - npm run lint:js
-  - npm test
+  - docker run docker-ember npm run test
